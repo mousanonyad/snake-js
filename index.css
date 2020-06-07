@@ -1,0 +1,11 @@
+canvas {
+    /*display: block;*/
+    background: gray;
+    border: 2px solid aqua;
+}
+h2 {
+    color: gray;
+}
+body {
+    background-color: black;
+}
