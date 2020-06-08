@@ -1,11 +1,17 @@
-canvas {
-    /*display: block;*/
-    background: gray;
-    border: 2px solid aqua;
+#canvas {
+    background: black;
+    border: 8px solid darkgreen;
 }
-h2 {
-    color: gray;
+
+#headerCanvas {
+    background: black;
 }
+
 body {
     background-color: black;
+}
+
+#center {
+    width: 100%;
+    text-align: center;
 }
