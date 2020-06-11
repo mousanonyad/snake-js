@@ -26,6 +26,14 @@ function switchDirection(event) {
     }
 }
 
+//Disable arrow key scrolling in users browser
+window.addEventListener("keydown", function(event) {
+    // space and arrow keys
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(event.key)) {
+        event.preventDefault();
+    }
+}, false);
+
 function restart() {
     location.reload();
 }

@@ -1,7 +1,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let width = canvas.width = 880;
-let height = canvas.height = 880;
+let height = canvas.height = 800;
 
 const headerCanvas = document.getElementById("headerCanvas");
 const headerCtx = headerCanvas.getContext("2d");
@@ -99,7 +99,7 @@ function drawHeader() {
     headerCtx.beginPath();
     headerCtx.clearRect(0, 0, headerWidth, headerHeight);
     headerCtx.fillStyle = "limegreen";
-    headerCtx.font = "bold 35px Permanent Marker";
+    headerCtx.font = "35px Permanent Marker";
     headerCtx.fillText("Score: " + score, 10, 50);
     headerCtx.fillText("Speed: " + speed, 190, 50);
     headerCtx.fillText("Best: " + bestScore, 720, 50);
@@ -140,7 +140,7 @@ function isInSnake(x, y) {
 
 function generateFood() {
     let x = Math.round(Math.random() * 21) * box;
-    let y = Math.round(Math.random() * 21) * box;
+    let y = Math.round(Math.random() * 19) * box;
     if (isInSnake(x, y)) {
         console.log("OUCH!");
         return generateFood();
@@ -170,7 +170,7 @@ function getBestScore() {
 function showHeaderMessage(message) {
     headerCtx.beginPath();
     headerCtx.fillStyle = "red";
-    headerCtx.font = "bold 25px Permanent Marker";
+    headerCtx.font = "25px Permanent Marker";
     headerCtx.fillText(message, 360, 50);
     headerCtx.closePath();
 }
@@ -186,9 +186,9 @@ function gameOver(message) {
     showHeaderMessage(message);
 
     ctx.fillStyle = "red";
-    ctx.font = "bold 45px Permanent Marker";
+    ctx.font = "45px Permanent Marker";
     ctx.fillText("Game over!", 315, 440);
-    ctx.font = "bold 35px Permanent Marker";
+    ctx.font = "35px Permanent Marker";
     ctx.fillText("Press any key to restart.", 230, 480);
     ctx.closePath();
     window.addEventListener("keydown", restart, false);
