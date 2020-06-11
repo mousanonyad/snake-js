@@ -18,14 +18,19 @@ let speedUp = 0;
 let speed = 1;
 
 let snake = new Snake();
+let tailToAdd = 0;
 
 let food = generateFood();
 
 let timeout = 1000 / 60;
 let game = setInterval(draw, timeout);
+let delay = 30;
+let countDown = delay;
 
 
 function draw() {
+    countDown !== 0 ? countDown-- : countDown;
+
     ctx.clearRect(0, 0, width, height);
     let currentDir = direction[0];
 
@@ -66,18 +71,24 @@ function draw() {
 
     let newHead = new Point(headX, headY);
 
+
+    if (isEatFood(headX, headY)) {
+        tailToAdd += 10;
+    } else {
+        snake.part.pop();
+    }
+
     let preLastPoint = snake.part[snake.part.length - 2];
     let lastPoint = snake.part[snake.part.length - 1];
 
-
-    if (isEatFood(headX, headY)) {
+    if (tailToAdd !== 0 && countDown === 0) {
         if (preLastPoint.x === lastPoint.x) {
             snake.addTail(createTail(lastPoint, 0, step))
         } else if (preLastPoint.y === lastPoint.y) {
             snake.addTail(createTail(lastPoint, step, 0))
         }
-    } else {
-        snake.part.pop();
+        tailToAdd--;
+        countDown = delay;
     }
 
     snake.part.unshift(newHead);
@@ -108,13 +119,7 @@ function drawHeader() {
 
 
 function createTail(point, x, y) {
-    let stepY = y;
-    let stepX = x;
-    let tail = [];
-    for (let i = 1; i < 7; i++) {
-        tail.push(new Point(point.x + stepX * i, point.y + stepY * i));
-    }
-    return tail;
+    return new Point(point.x + x, point.y + y);
 }
 
 function isSpeedUp() {
@@ -145,7 +150,6 @@ function generateFood() {
         console.log("OUCH!");
         return generateFood();
     } else {
-        console.log(x + " " + y);
         return {
             x: x,
             y: y

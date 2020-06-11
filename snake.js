@@ -7,7 +7,7 @@ class Snake {
     }
 
     addTail(points) {
-        this.part.push(...points);
+        this.part.push(points);
     }
 
     draw() {
