@@ -14,7 +14,7 @@ let step = box / divide;
 
 let score = 0;
 let bestScore = getBestScore();
-let speedUp = 0;
+let speedUpCounter = 0;
 let speed = 1;
 
 let snake = new Snake();
@@ -24,8 +24,8 @@ let food = generateFood();
 
 let timeout = 1000 / 60;
 let game = setInterval(draw, timeout);
-let delay = 30;
-let countDown = delay;
+let tailGrowDelay = 20;
+let countDown = tailGrowDelay;
 
 
 function draw() {
@@ -36,7 +36,6 @@ function draw() {
 
     let headX = snake.part[0].x;
     let headY = snake.part[0].y;
-
 
     switch (currentDir) {
         case UP:
@@ -57,7 +56,8 @@ function draw() {
         snake.draw();
         gameOver("Cause: Wall incident.");
         return;
-    } else if (isInSnake(headX, headY)) {
+    }
+    if (isInSnake(headX, headY)) {
         snake.draw();
         gameOver("Cause: Eat myself.");
         return;
@@ -71,9 +71,13 @@ function draw() {
 
     let newHead = new Point(headX, headY);
 
+    snake.part.unshift(newHead);
+    snake.draw();
 
     if (isEatFood(headX, headY)) {
         tailToAdd += 10;
+
+        food = generateFood();
     } else {
         snake.part.pop();
     }
@@ -88,11 +92,8 @@ function draw() {
             snake.addTail(createTail(lastPoint, step, 0))
         }
         tailToAdd--;
-        countDown = delay;
+        countDown = tailGrowDelay;
     }
-
-    snake.part.unshift(newHead);
-    snake.draw();
 
     isSpeedUp();
 
@@ -123,12 +124,21 @@ function createTail(point, x, y) {
 }
 
 function isSpeedUp() {
-    if (score % 5 === 0 && speedUp !== 0) {
-        speed++;
-        speedUp = 0;
-        clearInterval(game);
-        game = setInterval(draw, timeout -= 1);
+    // while speed less 5 - increase speed each 5 score
+    if (speed < 5 && score % 5 === 0 && speedUpCounter !== 0) {
+        speedUp();
     }
+    // when speed is above or equal 5 - increase speed each 10 score
+    else if (speed >= 5 && score % 10 === 0 && speedUpCounter !== 0) {
+        speedUp();
+    }
+}
+
+function speedUp() {
+    speed++;
+    speedUpCounter = 0;
+    clearInterval(game);
+    game = setInterval(draw, timeout -= 1);
 }
 
 function isOutOfArea(x, y) {
@@ -159,9 +169,8 @@ function generateFood() {
 
 function isEatFood(x, y) {
     if (food.x === x && food.y === y) {
-        food = generateFood();
         score++;
-        speedUp++;
+        speedUpCounter++;
         return true;
     }
 }
